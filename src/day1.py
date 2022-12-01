@@ -22,6 +22,6 @@ total = 0
 print('Answer to part 1 is: ', elves[len(elves) - 1])
 
 # Part 2 - Total calories being carried by the 3 elves carrying the most
-for elf in range(1, 4):
+for elf in range(0, 3):
     total = total + elves[len(elves) - 1 - elf]  
 print('Answer to part 2 is: ', total)
