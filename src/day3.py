@@ -28,12 +28,16 @@ print("Answer to part 1 =", prioritySum)
 badgeSum = 0
 
 for i in range(0, len(rucksacks), 3):
+    #Get groups of three rucksacks
     rucksack1 = set(rucksacks[i])
     rucksack2 = set(rucksacks[i+1])
     rucksack3 = set(rucksacks[i+2])
     
+    #Find the element contained in all three rucksacks
     badges = rucksack1.intersection(rucksack2, rucksack3)        
 
+    #Have to do this to access a string in a set
+    #Add the priority of the common badge to the sum
     for badge in badges:
         badgeSum = badgeSum + (alphabet.index(badge) + 1)
 
