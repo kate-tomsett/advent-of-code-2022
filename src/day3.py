@@ -23,7 +23,20 @@ for rucksack in rucksacks:
     for element in commonElements:
         prioritySum = prioritySum+ (alphabet.index(element) + 1)
     
-    
 print("Answer to part 1 =", prioritySum)
+
+badgeSum = 0
+
+for i in range(0, len(rucksacks), 3):
+    rucksack1 = set(rucksacks[i])
+    rucksack2 = set(rucksacks[i+1])
+    rucksack3 = set(rucksacks[i+2])
+    
+    badges = rucksack1.intersection(rucksack2, rucksack3)        
+
+    for badge in badges:
+        badgeSum = badgeSum + (alphabet.index(badge) + 1)
+
+print("Answer to part 2 =", badgeSum)
 
 fp.close
