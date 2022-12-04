@@ -25,3 +25,5 @@ print('Answer to part 1 is: ', elves[len(elves) - 1])
 for elf in range(0, 3):
     total = total + elves[len(elves) - 1 - elf]  
 print('Answer to part 2 is: ', total)
+
+fp.close
