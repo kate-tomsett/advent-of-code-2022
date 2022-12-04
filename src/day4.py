@@ -3,8 +3,11 @@ fp = open('data/day4-input.txt')
 elfPairs = fp.read().split('\n')
 
 numFullyContained = 0
+numOverlaps = 0
 
 for elfPair in elfPairs:
+    #Part 1
+    
     #Get sections assignments for each elf in the pair
     #Get start and end section IDs for each elf
     elf1, elf2 = elfPair.split(',')
@@ -24,7 +27,15 @@ for elfPair in elfPairs:
     #Increment number of fully contained assignemnts if either elf1Range or elf2Range is fully contained
     if (bool1 or bool2):
         numFullyContained += 1
+    
+    #Part 2
+    
+    #If the intersection of the two ranges is not zero, i.e. any element ovelaps, increment numOverlaps
+    if (set(elf1Range).intersection(set(elf2Range))):
+        numOverlaps += 1
 
 print('Answer to part 1 =' , numFullyContained)
+
+print('Answer to part 2 =' , numOverlaps)
 
 fp.close
