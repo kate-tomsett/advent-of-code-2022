@@ -20,6 +20,26 @@ def displayNodes(currentTree):
         print('in directory', currentTree.data, ', current node =', node.data, ', size =', node.size)
         if len(node.nodes) != 0:
             displayNodes(node)
+            
+def calcSum(currentTree, currentSum):
+    for node in currentTree.nodes:
+        if len(node.nodes) != 0:
+            currentTree.size += node.size
+            calcSum(node, currentSum)
+        sizeToReturn = 0
+    if currentTree.size <= 100000:
+        print('adding', currentTree.size, 'for directory', currentTree.data)
+        currentSum += currentTree.size
+
+def calcSum(currentTree, currentSum):
+    print('entered', currentTree.data)
+    for node in currentTree.nodes:
+        nodeSum = calcSum(node, currentSum)
+        print('size before', currentTree.size)
+        print('adding', nodeSum, 'for node', node.data)
+        currentTree.size =+ nodeSum
+        print('size after', currentTree.size)
+    return currentTree.size          
 
 fp = open('test-input.txt')
 
@@ -52,3 +72,6 @@ for line in lines:
  
  
 displayNodes(startTree)
+
+calcSum(startTree, 0)
+print(startTree.size)
