@@ -12,36 +12,25 @@ def sendTreeBack(startTree, currentTree, path):
     currentTree = startTree
     for index in path:
         currentTree = currentTree.nodes[index]
-        print('New directory name =' , currentTree.data)
     return(currentTree)
-
-def displayNodes(currentTree):
+    
+def calcSum(currentTree, accumulatedSum, maxSize):
     for node in currentTree.nodes:
-        print('in directory', currentTree.data, ', current node =', node.data, ', size =', node.size)
-        if len(node.nodes) != 0:
-            displayNodes(node)
-            
-def calcSum(currentTree, currentSum):
-    for node in currentTree.nodes:
-        if len(node.nodes) != 0:
-            currentTree.size += node.size
-            calcSum(node, currentSum)
-        sizeToReturn = 0
-    if currentTree.size <= 100000:
-        print('adding', currentTree.size, 'for directory', currentTree.data)
-        currentSum += currentTree.size
+        nodeSum, newSum = calcSum(node, accumulatedSum, maxSize)
+        accumulatedSum = newSum
+        currentTree.size += nodeSum
+    if currentTree.size <= maxSize and len(currentTree.nodes)!=0:
+        accumulatedSum += currentTree.size
+    return currentTree.size, accumulatedSum       
 
-def calcSum(currentTree, currentSum):
-    print('entered', currentTree.data)
+def findDir(currentTree, currentDir, space):
     for node in currentTree.nodes:
-        nodeSum = calcSum(node, currentSum)
-        print('size before', currentTree.size)
-        print('adding', nodeSum, 'for node', node.data)
-        currentTree.size =+ nodeSum
-        print('size after', currentTree.size)
-    return currentTree.size          
+        currentDir = findDir(node, currentDir, space)
+    if currentTree.size >= space and currentTree.size < currentDir and len(currentTree.nodes)!=0:
+        currentDir = currentTree.size
+    return currentDir    
 
-fp = open('test-input.txt')
+fp = open('day7-input.txt')
 
 lines = fp.read().split('\n')
 
@@ -56,22 +45,29 @@ for line in lines:
         if (input[2] == '/'):
             path = []
         elif(input[2] == '..'):
-            print('Going back one directory')
             path.pop()
             currentTree = sendTreeBack(startTree, currentTree, path)
-            print('New path =', path)            
         else:
-            print('Adding dir' , input[2])
             newPath = currentTree.addNode(input[2], 0)
             currentTree = currentTree.nodes[newPath]
             path.append(newPath)
-            print('New path =', path)
     if input[0].isnumeric():
-        print('Adding' , input[0], 'to path', path)
         currentTree.addNode(input[1], int(input[0]))
- 
- 
-displayNodes(startTree)
 
-calcSum(startTree, 0)
-print(startTree.size)
+totalSize = 0
+calculatedSum = 0
+maxSize = 100000
+
+totalSize, calculatedSum = calcSum(startTree, calculatedSum, maxSize)
+
+print('Total size', totalSize)
+print('Calculated sum', calculatedSum)
+
+spaceNeeded = 30000000 - (70000000 - totalSize)
+print('Space needed', spaceNeeded)
+
+chosenDir = totalSize
+
+chosenDir = findDir(startTree, chosenDir, spaceNeeded);
+
+print('Size of directory to delete', chosenDir)
