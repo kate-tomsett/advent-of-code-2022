@@ -34,28 +34,22 @@ lines = fp.read().split('\n')
 
 head_position = [0,0]
 tail_position = [0,0]
-tail_visited = []
+rope_positions = [[0,0], [0,0], [0,0], [0,0], [0,0], [0,0], [0,0], [0,0], [0,0], [0,0]]
+tail_visited_part1 = []
+tail_visited_part2 = []
 
 for line in lines:
     head_movements = line.split(' ')
     for movement in range(0, int(head_movements[1])):
         head_position = move(head_position, calculate_direction(head_movements[0]))
-        tail_position = check(head_position, tail_position)
-        if tail_position not in tail_visited:
-            tail_visited.append(tail_position)
-
-print('answer to part 1 -', len(tail_visited))
-
-rope_positions = [[0,0], [0,0], [0,0], [0,0], [0,0], [0,0], [0,0], [0,0], [0,0], [0,0]]
-tail_visited = []
-
-for line in lines:
-    head_movements = line.split(' ')
-    for movement in range(0, int(head_movements[1])):
         rope_positions[0] = move(rope_positions[0], calculate_direction(head_movements[0]))
+        tail_position = check(head_position, tail_position)
         for i in range(0, len(rope_positions)-1):
-            rope_positions[i+1] = check(rope_positions[i], rope_positions[i+1])
-        if rope_positions[-1] not in tail_visited:
-            tail_visited.append(rope_positions[-1])
+            rope_positions[i+1] = check(rope_positions[i], rope_positions[i+1])       
+        if tail_position not in tail_visited_part1:
+            tail_visited_part1.append(tail_position)
+        if rope_positions[-1] not in tail_visited_part2:
+            tail_visited_part2.append(rope_positions[-1])
 
-print('answer to part 2 -', len(tail_visited))
+print('answer to part 1 -', len(tail_visited_part1))
+print('answer to part 2 -', len(tail_visited_part2))
