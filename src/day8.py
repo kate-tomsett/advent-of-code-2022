@@ -1,71 +1,71 @@
-def isRowWiseHidden(input, row, col, height):
+def is_row_wise_hidden(input, row, col, height):
     #LEFT
-    safeFromLeft = False
+    hidden_from_left = False
     
     for i in range(0, col):
         if input[row][i] >= height:
-            safeFromLeft = True
+            hidden_from_left = True
             break
         
     #RIGHT
-    safeFromRight = False
+    hidden_from_right = False
     
     for i in range(col+1, len(input[0])):
         if input[row][i] >= height:
-            safeFromRight = True
+            hidden_from_right = True
             break
 
-    return(safeFromLeft and safeFromRight)
+    return(hidden_from_left and hidden_from_right)
     
-def isColumnWiseHidden(input, row, col, height):
+def is_column_wise_hidden(input, row, col, height):
     #TOP
-    safeFromTop = False
+    hidden_from_top = False
     
     for i in range(0, row):
         if input[i][col] >= height:
-            safeFromTop = True
+            hidden_from_top = True
             break
         
     #BOTTOM
-    safeFromBottom = False
+    hidden_from_bottom = False
     
     for i in range(row+1, len(input)):
         if input[i][col] >= height:
-            safeFromBottom = True
+            hidden_from_bottom = True
             break
 
-    return (safeFromTop and safeFromBottom)
+    return (hidden_from_top and hidden_from_bottom)
     
-def calcScenicScore(input, row, col, height):
+def calculate_scenic_score(input, row, col, height):
     #LEFT
-    leftScore = 0
+    left_score = 0
     for i in range(col-1, -1, -1):
-        leftScore+=1
+        left_score+=1
         if input[row][i] >= height:
             break
     
     #RIGHT
-    rightScore = 0
+    right_score = 0
     for i in range(col+1, len(input[0])):
-        rightScore+=1
+        right_score+=1
         if input[row][i] >= height:
             break    
 
     #UP
-    upScore = 0
+    up_score = 0
     for i in range(row-1, -1, -1):
-        upScore+=1
+        up_score+=1
         if input[i][col] >= height:
             break     
 
     #DOWN
-    downScore = 0
+    down_score = 0
     for i in range(row+1, len(input)):
-        downScore+=1
+        down_score+=1
         if input[i][col] >= height:
             break       
     
-    return (leftScore * rightScore * upScore * downScore)
+    return (left_score * right_score * up_score * down_score)
     
 fp = open('data/day8-input.txt')
 
@@ -80,9 +80,9 @@ currentScenicScore = 0
 for row in range(0, len(inputMatrix)):
     for col in range(0, len(inputMatrix)):
         height = inputMatrix[row][col]
-        if (isRowWiseHidden(inputMatrix, row, col, height) and isColumnWiseHidden(inputMatrix, row, col, height)):
+        if (is_row_wise_hidden(inputMatrix, row, col, height) and is_column_wise_hidden(inputMatrix, row, col, height)):
             numHidden+=1
-        newScenicScore = calcScenicScore(inputMatrix, row, col, height)
+        newScenicScore = calculate_scenic_score(inputMatrix, row, col, height)
         if (newScenicScore > currentScenicScore):
             currentScenicScore = newScenicScore
             

@@ -1,4 +1,4 @@
-fp = open('day6-input.txt')
+fp = open('data/day6-input.txt')
 
 input = fp.read()
 marker = 0

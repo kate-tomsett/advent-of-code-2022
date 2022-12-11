@@ -4,38 +4,38 @@ class Tree:
         self.nodes = []
         self.size = size
         
-    def addNode(self, data, size):
+    def add_node(self, data, size):
         self.nodes.append(Tree(data, size))
         return len(self.nodes)-1
 
-def sendTreeBack(startTree, currentTree, path):
-    currentTree = startTree
+def return_to_previous_directory(original_tree, path):
+    previous_tree = original_tree
     for index in path:
-        currentTree = currentTree.nodes[index]
-    return(currentTree)
+        previous_tree = previous_tree.nodes[index]
+    return(previous_tree)
     
-def calcSum(currentTree, accumulatedSum, maxSize):
-    for node in currentTree.nodes:
-        nodeSum, newSum = calcSum(node, accumulatedSum, maxSize)
-        accumulatedSum = newSum
-        currentTree.size += nodeSum
-    if currentTree.size <= maxSize and len(currentTree.nodes)!=0:
-        accumulatedSum += currentTree.size
-    return currentTree.size, accumulatedSum       
+def calc_sum(current_tree, accumulated_sum, max_size):
+    for node in current_tree.nodes:
+        total_size_of_node, new_sum = calc_sum(node, accumulated_sum, max_size)
+        accumulated_sum = new_sum
+        current_tree.size += total_size_of_node
+    if current_tree.size <= max_size and len(current_tree.nodes)!=0:
+        accumulated_sum += current_tree.size
+    return current_tree.size, accumulated_sum       
 
-def findDir(currentTree, currentDir, space):
-    for node in currentTree.nodes:
-        currentDir = findDir(node, currentDir, space)
-    if currentTree.size >= space and currentTree.size < currentDir and len(currentTree.nodes)!=0:
-        currentDir = currentTree.size
-    return currentDir    
+def find_dir_to_delete(current_tree, current_dir_to_delete, space):
+    for node in current_tree.nodes:
+        current_dir_to_delete = find_dir_to_delete(node, current_dir_to_delete, space)
+    if current_tree.size >= space and current_tree.size < current_dir_to_delete and len(current_tree.nodes)!=0:
+        current_dir_to_delete = current_tree.size
+    return current_dir_to_delete    
 
-fp = open('day7-input.txt')
+fp = open('data/day7-input.txt')
 
 lines = fp.read().split('\n')
 
-startTree = Tree('/', 0)
-currentTree = startTree
+original_tree = Tree('/', 0)
+current_tree = original_tree
 path = []
 myPath = 0
 
@@ -46,19 +46,19 @@ for line in lines:
             path = []
         elif(input[2] == '..'):
             path.pop()
-            currentTree = sendTreeBack(startTree, currentTree, path)
+            current_tree = return_to_previous_directory(original_tree, path)
         else:
-            newPath = currentTree.addNode(input[2], 0)
-            currentTree = currentTree.nodes[newPath]
+            newPath = current_tree.add_node(input[2], 0)
+            current_tree = current_tree.nodes[newPath]
             path.append(newPath)
     if input[0].isnumeric():
-        currentTree.addNode(input[1], int(input[0]))
+        current_tree.add_node(input[1], int(input[0]))
 
 totalSize = 0
 calculatedSum = 0
-maxSize = 100000
+max_size = 100000
 
-totalSize, calculatedSum = calcSum(startTree, calculatedSum, maxSize)
+totalSize, calculatedSum = calc_sum(original_tree, calculatedSum, max_size)
 
 print('Total size', totalSize)
 print('Calculated sum', calculatedSum)
@@ -68,6 +68,6 @@ print('Space needed', spaceNeeded)
 
 chosenDir = totalSize
 
-chosenDir = findDir(startTree, chosenDir, spaceNeeded);
+chosenDir = find_dir_to_delete(original_tree, chosenDir, spaceNeeded);
 
 print('Size of directory to delete', chosenDir)
