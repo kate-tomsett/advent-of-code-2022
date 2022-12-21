@@ -41,7 +41,7 @@ def shortest_path(grid, start, end):
                     previous.append(node)
         
         path_index += 1
-    return []
+    return [0]*(len(grid) * len(grid[0]))
 
 fp = open('day12-input.txt')
  
@@ -50,12 +50,9 @@ rows = fp.read().split('\n')
 alphabet = list(string.ascii_letters)
 
 grid = []
-S = [0,0]
+As = []
 E = [0,0]
 current = [0, 0]
-
-solution = []
-
 
 num_rows = len(rows)
 num_cols = len(rows[0])
@@ -64,13 +61,20 @@ for row in range(0, num_rows):
     grid.append([])
     for col in range(0, num_cols):
         grid[row].append(rows[row][col])
-        if rows[row][col] == 'S':
-            S = [row, col]
-            current = [row, col]
+        if rows[row][col] == 'a' or rows[row][col] == 'S':
+            As.append([row, col])
             grid[row][col] = 'a'
         elif rows[row][col] == 'E':
             E = [row, col]
             grid[row][col] = 'z'
 
-solution = shortest_path(grid, S, E)
-print('Answer to part 1 -', len(solution))
+final_solution = [0] * (num_cols * num_rows)
+current_solution = []
+
+
+for start_point in As:
+    current_solution = shortest_path(grid, start_point, E)
+    if len(current_solution) < len(final_solution):
+        final_solution = current_solution.copy()
+        
+print('Answer to part 2 -', len(final_solution))
